@@ -2,8 +2,8 @@ using System.Collections.ObjectModel;
 
 namespace AppProofAPI.ViewModels;
 
-public class CollectionNode
+public class ProjectNode
 {
     public string? Name { get; set; }
-    public ObservableCollection<CollectionNode> Children { get; set; } = new();
+    public ObservableCollection<ProjectNode> Children { get; set; } = new();
 }
