@@ -1,4 +1,7 @@
 using System.Net.Http.Headers;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
 namespace ProofAPI.Services
 {
     public class AuthService : IAuthService

@@ -1,5 +1,7 @@
 using ProofAPI.Models;
 using System.IO;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace ProofAPI.Services
 {
     public class DataExporter : IDataExporter

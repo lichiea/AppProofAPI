@@ -89,3 +89,5 @@ C:\Users\Liza\AppProofAPI\obj\Debug\net10.0\refint\AppProofAPI.dll
 C:\Users\Liza\AppProofAPI\obj\Debug\net10.0\AppProofAPI.pdb
 C:\Users\Liza\AppProofAPI\obj\Debug\net10.0\AppProofAPI.genruntimeconfig.cache
 C:\Users\Liza\AppProofAPI\obj\Debug\net10.0\ref\AppProofAPI.dll
+C:\Users\Liza\AppProofAPI\obj\Debug\net10.0\AppProofAPI.sourcelink.json
+C:\Users\Liza\AppProofAPI\bin\Debug\net10.0\CommunityToolkit.Mvvm.dll
