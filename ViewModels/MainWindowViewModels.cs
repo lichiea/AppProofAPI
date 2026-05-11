@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Avalonia.Controls;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace AppProofAPI.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly HttpClient _httpClient = new HttpClient();
+    private Window? _window;
 
     [ObservableProperty]
     private string _selectedHttpMethod = "GET";
@@ -46,6 +48,11 @@ public partial class MainWindowViewModel : ObservableObject
     public IRelayCommand AddQueryParamCommand { get; }
     public IRelayCommand AddHeaderCommand { get; }
 
+    public IRelayCommand MinimizeWindowCommand { get; }
+    public IRelayCommand MaximizeWindowCommand { get; }
+    public IRelayCommand CloseWindowCommand { get; }
+
+
     public MainWindowViewModel()
     {
         QueryParams = new ObservableCollection<KeyValueItem>();
@@ -54,6 +61,10 @@ public partial class MainWindowViewModel : ObservableObject
         SendCommand = new AsyncRelayCommand(SendRequestAsync);
         AddQueryParamCommand = new RelayCommand(() => AddParam(QueryParams));
         AddHeaderCommand = new RelayCommand(() => AddParam(Headers));
+
+        MinimizeWindowCommand = new RelayCommand(MinimizeWindow);
+        MaximizeWindowCommand = new RelayCommand(MaximizeWindow);
+        CloseWindowCommand = new RelayCommand(CloseWindow);
 
         ParseInitialQueryParams();
 
@@ -65,6 +76,30 @@ public partial class MainWindowViewModel : ObservableObject
                 Children = { new CollectionNode { Name = "GET Test GET" } }
             }
         };
+    }
+
+        public void SetWindow(Window window)
+    {
+        _window = window;
+    }
+
+    private void MinimizeWindow()
+    {
+        if (_window != null)
+            _window.WindowState = WindowState.Minimized;
+    }
+
+    private void MaximizeWindow()
+    {
+        if (_window == null) return;
+        _window.WindowState = _window.WindowState == WindowState.Maximized
+            ? WindowState.Normal
+            : WindowState.Maximized;
+    }
+
+    private void CloseWindow()
+    {
+        _window?.Close();
     }
 
     private void ParseInitialQueryParams()

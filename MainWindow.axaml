@@ -1,35 +1,36 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:AppProofAPI.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
         x:Class="AppProofAPI.MainWindow"
-        Title="API Client - Postman Like"
-        Width="1200" Height="800"
-        WindowStartupLocation="CenterScreen">
+        Title="ProofAPI"
+        Icon="/Assets/logo.ico"
+        Width="1200" Height="800" Foreground="Beige"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        CanResize="True"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="40">
+
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    <Grid RowDefinitions="Auto,*">
-        <!-- Верхняя панель -->
-        <Border Grid.Row="0" Background="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+        <!-- Кастомная строка заголовка -->
+        <Border Grid.Row="0" Height="40" Background="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}">
+        </Border>
+
+        <!-- Панель с методом, URL и кнопкой Send -->
+        <Border Grid.Row="1" Background="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}" Padding="8">
             <DockPanel>
                 <Button DockPanel.Dock="Right" Content="Send" Command="{Binding SendCommand}" Width="80" Margin="8,0,0,0" Background="#FF6C37" Foreground="White" />
-                <TextBox DockPanel.Dock="Left" Text="{Binding RequestUrl}" PlaceholderText="Enter URL" Margin="8,0" VerticalAlignment="Center">
-                    <TextBox.Styles>
-                        <Style Selector="TextBox">
-                            <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        </Style>
-                    </TextBox.Styles>
-                </TextBox>
+                <TextBox DockPanel.Dock="Left" Text="{Binding RequestUrl}" PlaceholderText="Enter URL" Margin="8,0" VerticalAlignment="Center" />
                 <ComboBox DockPanel.Dock="Left" SelectedItem="{Binding SelectedHttpMethod}" ItemsSource="{Binding HttpMethods}" Width="100" Margin="8,0,0,0" />
             </DockPanel>
         </Border>
 
         <!-- Основное содержимое -->
-        <Grid Grid.Row="1" ColumnDefinitions="250,5,*">
-            <!-- Левая панель -->
+        <Grid Grid.Row="2" ColumnDefinitions="250,5,*">
             <Border Grid.Column="0" Background="{DynamicResource SystemAltHighColor}">
                 <DockPanel>
                     <TextBlock Text="Collections" DockPanel.Dock="Top" FontWeight="Bold" Margin="10,10,10,5" />
@@ -42,14 +43,9 @@
                     </TreeView>
                 </DockPanel>
             </Border>
-
-            <!-- Разделитель -->
             <GridSplitter Grid.Column="1" Background="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}" />
-
-            <!-- Правая область -->
             <ScrollViewer Grid.Column="2">
                 <StackPanel Margin="10">
-                    <!-- Вкладки -->
                     <TabControl Margin="0,10">
                         <TabItem Header="Params">
                             <StackPanel>
@@ -67,7 +63,6 @@
                                 <Button Content="Add param" Command="{Binding AddQueryParamCommand}" Margin="0,5" />
                             </StackPanel>
                         </TabItem>
-
                         <TabItem Header="Headers">
                             <StackPanel>
                                 <ItemsControl ItemsSource="{Binding Headers}">
@@ -84,13 +79,11 @@
                                 <Button Content="Add header" Command="{Binding AddHeaderCommand}" Margin="0,5" />
                             </StackPanel>
                         </TabItem>
-
                         <TabItem Header="Body">
                             <TextBox Text="{Binding RequestBody}" AcceptsReturn="True" Height="150" />
                         </TabItem>
                     </TabControl>
 
-                    <!-- Область ответа -->
                     <Border BorderBrush="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}" BorderThickness="1" Margin="0,10">
                         <StackPanel>
                             <Grid Background="{DynamicResource SystemAltHighColor}" Margin="8">
