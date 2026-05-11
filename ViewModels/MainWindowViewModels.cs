@@ -42,7 +42,7 @@ public partial class MainWindowViewModel : ObservableObject
     public ObservableCollection<KeyValueItem> QueryParams { get; }
     public ObservableCollection<KeyValueItem> Headers { get; }
 
-    public ObservableCollection<CollectionNode> Collections { get; }
+    public ObservableCollection<ProjectNode> Collections { get; }
 
     public IRelayCommand SendCommand { get; }
     public IRelayCommand AddQueryParamCommand { get; }
@@ -68,12 +68,12 @@ public partial class MainWindowViewModel : ObservableObject
 
         ParseInitialQueryParams();
 
-        Collections = new ObservableCollection<CollectionNode>
+        Collections = new ObservableCollection<ProjectNode>
         {
-            new CollectionNode
+            new ProjectNode
             {
                 Name = "Test Collection",
-                Children = { new CollectionNode { Name = "GET Test GET" } }
+                Children = { new ProjectNode { Name = "GET Test GET" } }
             }
         };
     }
