@@ -1,7 +1,18 @@
-using ProofAPI.Models;
+// Models/ApiSpec.cs (внутреннее представление OpenAPI)
 using System.Collections.Generic;
-using System.Threading.Tasks;
-namespace ProofAPI.Services
+
+namespace ProofAPI.Models
 {
-    public class ApiSpec { public string? Title { get; set; } public List<string>? Endpoints { get; set; } }
+    public class ApiEndpoint
+    {
+        public string Path { get; set; } = string.Empty;
+        public string Method { get; set; } = string.Empty; // GET, POST, ...
+        public Dictionary<string, string> Parameters { get; set; } = new(); // paramName -> example value
+    }
+
+    public class ApiSpec
+    {
+        public List<ApiEndpoint> Endpoints { get; set; } = new();
+        public string? BaseUrl { get; set; }
+    }
 }

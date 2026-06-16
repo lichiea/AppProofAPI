@@ -1,115 +1,304 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:AppProofAPI.ViewModels"
+        xmlns:data="using:Avalonia.Controls"
         x:Class="AppProofAPI.MainWindow"
         Title="ProofAPI"
         Icon="/Assets/logo.ico"
-        Width="1200" Height="800" Foreground="Beige"
+        Width="1280" Height="800"
+        MinWidth="900" MinHeight="600"
+        Background="{StaticResource BgMainBrush}"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         CanResize="True"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaTitleBarHeightHint="40">
+        ExtendClientAreaTitleBarHeightHint="-1">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
+    <!-- DockPanel – основной контейнер для боковой панели и основного содержимого -->
+    <DockPanel>
+        <!-- Боковая панель (без изменений) -->
+        <Border DockPanel.Dock="Left"
+                Width="260"
+                Background="{StaticResource BgSidebarBrush}">
+            <DockPanel LastChildFill="True">
+                <Border DockPanel.Dock="Top" Padding="20 16" BorderThickness="0 0 0 1" BorderBrush="#1a334d">
+                    <DockPanel>
+                        <Border Width="32" Height="32" CornerRadius="6" Background="Transparent">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Offset="0" Color="{StaticResource ColorLightBlue}" />
+                                    <GradientStop Offset="1" Color="{StaticResource ColorSky}" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="P" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    FontWeight="Bold" FontSize="16" Foreground="White" />
+                        </Border>
+                        <TextBlock Text="ProofAPI" FontSize="16" FontWeight="SemiBold" Foreground="White"
+                                VerticalAlignment="Center" Margin="10 0 0 0" />
+                    </DockPanel>
+                </Border>
 
-    <Grid RowDefinitions="Auto,Auto,*">
-        <!-- Кастомная строка заголовка -->
-        <Border Grid.Row="0" Height="40" Background="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}">
-        </Border>
+                <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0 12 0 0">
+                        <TextBlock Text="РАБОЧАЯ ОБЛАСТЬ" FontSize="11" FontWeight="SemiBold"
+                                Foreground="#667799" Margin="20 0 0 8" LetterSpacing="1" />
 
-        <!-- Панель с методом, URL и кнопкой Send -->
-        <Border Grid.Row="1" Background="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}" Padding="8">
-            <DockPanel>
-                <Button DockPanel.Dock="Right" Content="Send" Command="{Binding SendCommand}" Width="80" Margin="8,0,0,0" Background="#FF6C37" Foreground="White" />
-                <TextBox DockPanel.Dock="Left" Text="{Binding RequestUrl}" PlaceholderText="Enter URL" Margin="8,0" VerticalAlignment="Center" />
-                <ComboBox DockPanel.Dock="Left" SelectedItem="{Binding SelectedHttpMethod}" ItemsSource="{Binding HttpMethods}" Width="100" Margin="8,0,0,0" />
+                        <Border Margin="0 2 0 0" Padding="16 8" Background="Transparent">
+                            <Border.Styles>
+                                <Style Selector="Border:pointerover">
+                                    <Setter Property="Background" Value="#1a334d" />
+                                </Style>
+                            </Border.Styles>
+                            <DockPanel>
+                                <Path DockPanel.Dock="Left" Margin="0 0 12 0"
+                                    Data="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"
+                                    Stroke="White" StrokeThickness="1.5" Width="16" Height="16" />
+                                <TextBlock Text="Импорт спецификации" Foreground="White" FontSize="14" />
+                            </DockPanel>
+                        </Border>
+
+                        <Border Margin="0 2 0 0" Padding="16 8" Background="#1a334d" BorderThickness="3 0 0 0" BorderBrush="{StaticResource ColorSky}">
+                            <DockPanel>
+                                <Path DockPanel.Dock="Left" Margin="0 0 12 0"
+                                    Data="M22 12h-4l-3 9-6-18-3 9H2"
+                                    Stroke="White" StrokeThickness="1.5" Width="16" Height="16" />
+                                <TextBlock Text="Нагрузочное тестирование" Foreground="White" FontSize="14" FontWeight="SemiBold" />
+                            </DockPanel>
+                        </Border>
+
+                        <Border Margin="0 2 0 0" Padding="16 8" Background="Transparent">
+                            <DockPanel>
+                                <Path DockPanel.Dock="Left" Margin="0 0 12 0"
+                                    Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                                    Stroke="White" StrokeThickness="1.5" Width="16" Height="16" />
+                                <TextBlock Text="Тестирование безопасности" Foreground="White" FontSize="14" />
+                            </DockPanel>
+                        </Border>
+
+                        <Border Margin="0 2 0 0" Padding="16 8" Background="Transparent">
+                            <DockPanel>
+                                <Path DockPanel.Dock="Left" Margin="0 0 12 0"
+                                    Data="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"
+                                    Stroke="White" StrokeThickness="1.5" Width="16" Height="16" />
+                                <TextBlock Text="История запусков" Foreground="White" FontSize="14" />
+                            </DockPanel>
+                        </Border>
+
+                        <TextBlock Text="СИСТЕМА" FontSize="11" FontWeight="SemiBold"
+                                Foreground="#667799" Margin="20 16 0 8" LetterSpacing="1" />
+                        <Border Margin="0 2 0 0" Padding="16 8" Background="Transparent">
+                            <DockPanel>
+                                <Path DockPanel.Dock="Left" Margin="0 0 12 0"
+                                    Data="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"
+                                    Stroke="White" StrokeThickness="1.5" Width="16" Height="16" />
+                                <TextBlock Text="Настройки" Foreground="White" FontSize="14" />
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Border DockPanel.Dock="Bottom" Padding="20 16" BorderThickness="0 1 0 0" BorderBrush="#1a334d">
+                    <DockPanel>
+                        <Path DockPanel.Dock="Left" Margin="0 0 8 0"
+                            Data="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"
+                            Stroke="#667799" StrokeThickness="1.5" Width="14" Height="14" />
+                        <TextBlock Text="МНТ v1.0.0 | Готово" Foreground="#667799" FontSize="12" />
+                    </DockPanel>
+                </Border>
             </DockPanel>
         </Border>
 
-        <!-- Основное содержимое -->
-        <Grid Grid.Row="2" ColumnDefinitions="250,5,*">
-            <Border Grid.Column="0" Background="{DynamicResource SystemAltHighColor}">
+        <!-- Основная часть -->
+        <StackPanel DockPanel.Dock="Right" Orientation="Vertical" Background="{StaticResource BgMainBrush}">
+
+            <!-- Верхний бар -->
+            <Border Padding="16 12" Background="{StaticResource BgCardBrush}"
+                    BorderThickness="0 0 0 1" BorderBrush="{StaticResource BorderBrush}"
+                    BoxShadow="0 1 2 0 rgba(0,0,0,0.05)">
                 <DockPanel>
-                    <TextBlock Text="Projects" DockPanel.Dock="Top" FontWeight="Bold" Margin="10,10,10,5" />
-                    <TreeView ItemsSource="{Binding Projects}">
-                        <TreeView.ItemTemplate>
-                            <TreeDataTemplate ItemsSource="{Binding Children}">
-                                <TextBlock Text="{Binding Name}" />
-                            </TreeDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                        <TextBlock Text="Проекты" Foreground="{StaticResource TextSecondaryBrush}" FontSize="14" />
+                        <Path Data="M9 18L15 12L9 6" Stroke="{StaticResource TextSecondaryBrush}" StrokeThickness="2" Width="14" Height="14" Margin="6 0" />
+                        <TextBlock Text="E-Commerce API" Foreground="{StaticResource TextSecondaryBrush}" FontSize="14" />
+                        <Path Data="M9 18L15 12L9 6" Stroke="{StaticResource TextSecondaryBrush}" StrokeThickness="2" Width="14" Height="14" Margin="6 0" />
+                        <TextBlock Text="Профиль: High Load 50VU" Foreground="{StaticResource TextPrimaryBrush}" FontSize="14" FontWeight="SemiBold" />
+                    </StackPanel>
+                    <Border DockPanel.Dock="Right" Background="#dcfce7" CornerRadius="20" Padding="6 4 10 4">
+                        <DockPanel>
+                            <Border Width="8" Height="8" CornerRadius="4" Background="#22c55e" Margin="0 0 6 0" />
+                            <TextBlock Text="Тест успешно завершен" Foreground="#15803d" FontSize="12" FontWeight="SemiBold" />
+                        </DockPanel>
+                    </Border>
                 </DockPanel>
             </Border>
-            <GridSplitter Grid.Column="1" Background="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}" />
-            <ScrollViewer Grid.Column="2">
-                <StackPanel Margin="10">
-                    <TabControl Margin="0,10">
-                        <TabItem Header="Params">
-                            <StackPanel>
-                                <ItemsControl ItemsSource="{Binding QueryParams}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid ColumnDefinitions="*,*,Auto" Margin="0,2">
-                                                <TextBox Text="{Binding Key}" PlaceholderText="Key" Grid.Column="0" Margin="2" />
-                                                <TextBox Text="{Binding Value}" PlaceholderText="Value" Grid.Column="1" Margin="2" />
-                                                <Button Content="✕" Command="{Binding RemoveCommand}" Width="30" Grid.Column="2" Margin="2" Background="Transparent" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                <Button Content="Add param" Command="{Binding AddQueryParamCommand}" Margin="0,5" />
-                            </StackPanel>
-                        </TabItem>
-                        <TabItem Header="Headers">
-                            <StackPanel>
-                                <ItemsControl ItemsSource="{Binding Headers}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid ColumnDefinitions="*,*,Auto" Margin="0,2">
-                                                <TextBox Text="{Binding Key}" PlaceholderText="Header name" Grid.Column="0" Margin="2" />
-                                                <TextBox Text="{Binding Value}" PlaceholderText="Header value" Grid.Column="1" Margin="2" />
-                                                <Button Content="✕" Command="{Binding RemoveCommand}" Width="30" Grid.Column="2" Margin="2" Background="Transparent" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                <Button Content="Add header" Command="{Binding AddHeaderCommand}" Margin="0,5" />
-                            </StackPanel>
-                        </TabItem>
-                        <TabItem Header="Body">
-                            <TextBox Text="{Binding RequestBody}" AcceptsReturn="True" Height="150" />
-                        </TabItem>
-                    </TabControl>
 
-                    <Border BorderBrush="{DynamicResource SystemControlForegroundChromeBlackMediumBrush}" BorderThickness="1" Margin="0,10">
+            <!-- Прокручиваемый контент -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Background="{StaticResource BgMainBrush}">
+                <StackPanel Margin="24" Spacing="20">
+
+                    <Grid ColumnDefinitions="320, *" RowDefinitions="Auto" ColumnSpacing="20">
+
+                        <!-- Карточка конфигурации -->
+                        <Border Classes="Card" Grid.Column="0">
+                            <StackPanel>
+                                <!-- Заголовок карточки обёрнут в Border с классом CardHeader -->
+                                <Border Classes="CardHeader">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                            Stroke="{StaticResource TextPrimaryBrush}" StrokeThickness="1.5" Width="16" Height="16" />
+                                        <TextBlock Text="Конфигурация профиля" FontWeight="SemiBold" FontSize="15" Margin="8 0 0 0" />
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Margin="20">
+                                    <TextBlock Classes="muted" Text="ВИРТУАЛЬНЫЕ ПОЛЬЗОВАТЕЛИ" />
+                                    <Border Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0 4 0 12">
+                                        <DockPanel>
+                                            <TextBlock Text="50" FontSize="18" FontWeight="SemiBold" />
+                                            <TextBlock Text="VU" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="8 0 0 0" />
+                                        </DockPanel>
+                                    </Border>
+                                    <TextBlock Classes="muted" Text="ДЛИТЕЛЬНОСТЬ ТЕСТА" />
+                                    <Border Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0 4 0 12">
+                                        <DockPanel>
+                                            <TextBlock Text="60" FontSize="18" FontWeight="SemiBold" />
+                                            <TextBlock Text="сек" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="8 0 0 0" />
+                                        </DockPanel>
+                                    </Border>
+                                    <TextBlock Classes="muted" Text="РАЗГОН (RAMP-UP)" />
+                                    <Border Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0 4 0 12">
+                                        <DockPanel>
+                                            <TextBlock Text="10" FontSize="18" FontWeight="SemiBold" />
+                                            <TextBlock Text="сек" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="8 0 0 0" />
+                                        </DockPanel>
+                                    </Border>
+                                    <TextBlock Classes="muted" Text="THINK TIME" />
+                                    <Border Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0 4 0 12">
+                                        <DockPanel>
+                                            <TextBlock Text="0.5 – 1.5" FontSize="18" FontWeight="SemiBold" />
+                                            <TextBlock Text="сек" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="8 0 0 0" />
+                                        </DockPanel>
+                                    </Border>
+                                    <Border Background="rgba(0,47,167,0.08)" BorderBrush="rgba(0,47,167,0.2)" CornerRadius="6" Padding="6 8" Margin="0 8 0 0">
+                                        <DockPanel>
+                                            <Path Data="M22 12h-4l-3 9-6-18-3 9H2" Stroke="{StaticResource ColorSecondaryBlue}" StrokeThickness="1.5" Width="14" Height="14" />
+                                            <TextBlock Text="МНТ активен | Генерация завершена" Foreground="{StaticResource ColorSecondaryBlue}" FontSize="12" FontWeight="SemiBold" Margin="8 0 0 0" />
+                                        </DockPanel>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Карточка с метриками и графиком -->
+                        <Border Classes="Card" Grid.Column="1">
+                            <StackPanel>
+                                <Border Classes="CardHeader">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Результаты выполнения" FontWeight="SemiBold" FontSize="15" />
+                                        <TextBlock Text="Время завершения: 14:32:18" Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="20 0 0 0" />
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Margin="20" Spacing="16">
+                                    <Grid ColumnDefinitions="*, *, *, *, *, *" RowDefinitions="Auto" ColumnSpacing="12" RowSpacing="12">
+                                        <Border Grid.Column="0" Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="5,840" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Всего запросов" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="120 мс" FontSize="24" FontWeight="Bold" Foreground="#059669" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Среднее время отклика" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="2" Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="0" FontSize="24" FontWeight="Bold" Foreground="#059669" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Зафиксировано ошибок" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="3" Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="97.3 RPS" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Пропускная способность" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="4" Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="P95: 210" FontSize="24" FontWeight="Bold" Foreground="#059669" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Латентность (мс)" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="5" Background="#f8fafc" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="Стабильно" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Состояние системы" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <TextBlock Text="Динамика времени отклика (мс) по секундам" FontSize="12" Foreground="{StaticResource TextMutedBrush}" FontWeight="Medium" />
+                                    <Border Background="white" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="16 12">
+                                        <Canvas Width="600" Height="160">
+                                            <Line StartPoint="40,20" EndPoint="580,20" Stroke="#f1f5f9" StrokeThickness="1" StrokeDashArray="4" />
+                                            <Line StartPoint="40,50" EndPoint="580,50" Stroke="#f1f5f9" StrokeThickness="1" StrokeDashArray="4" />
+                                            <Line StartPoint="40,80" EndPoint="580,80" Stroke="#f1f5f9" StrokeThickness="1" StrokeDashArray="4" />
+                                            <Line StartPoint="40,110" EndPoint="580,110" Stroke="#f1f5f9" StrokeThickness="1" StrokeDashArray="4" />
+                                            <Line StartPoint="40,140" EndPoint="580,140" Stroke="#f1f5f9" StrokeThickness="1" StrokeDashArray="4" />
+                                            <TextBlock Text="300" Canvas.Left="4" Canvas.Top="12" FontSize="10" Foreground="#94a3b8" />
+                                            <TextBlock Text="150" Canvas.Left="4" Canvas.Top="42" FontSize="10" Foreground="#94a3b8" />
+                                            <TextBlock Text="0" Canvas.Left="4" Canvas.Top="132" FontSize="10" Foreground="#94a3b8" />
+                                            <TextBlock Text="10с" Canvas.Left="100" Canvas.Top="148" FontSize="10" Foreground="#94a3b8" />
+                                            <TextBlock Text="20с" Canvas.Left="235" Canvas.Top="148" FontSize="10" Foreground="#94a3b8" />
+                                            <TextBlock Text="30с" Canvas.Left="370" Canvas.Top="148" FontSize="10" Foreground="#94a3b8" />
+                                            <TextBlock Text="40с" Canvas.Left="505" Canvas.Top="148" FontSize="10" Foreground="#94a3b8" />
+                                            <TextBlock Text="60с" Canvas.Left="560" Canvas.Top="148" FontSize="10" Foreground="#94a3b8" />
+                                            <Polygon Points="40,110 80,95 130,85 180,82 230,80 280,79 330,81 380,78 430,80 480,83 530,79 580,80 580,140 40,140"
+                                                    Fill="#4169e1" Opacity="0.2" />
+                                            <Polyline Points="40,110 80,95 130,85 180,82 230,80 280,79 330,81 380,78 430,80 480,83 530,79 580,80"
+                                                    Stroke="#4169e1" StrokeThickness="2" StrokeJoin="Round" />
+                                            <Ellipse Canvas.Left="36" Canvas.Top="106" Width="6" Height="6" Fill="white" Stroke="#0047ab" StrokeThickness="2" />
+                                            <Ellipse Canvas.Left="176" Canvas.Top="78" Width="6" Height="6" Fill="white" Stroke="#0047ab" StrokeThickness="2" />
+                                            <Ellipse Canvas.Left="326" Canvas.Top="77" Width="6" Height="6" Fill="white" Stroke="#0047ab" StrokeThickness="2" />
+                                            <Ellipse Canvas.Left="476" Canvas.Top="79" Width="6" Height="6" Fill="white" Stroke="#0047ab" StrokeThickness="2" />
+                                            <Ellipse Canvas.Left="576" Canvas.Top="76" Width="6" Height="6" Fill="white" Stroke="#0047ab" StrokeThickness="2" />
+                                        </Canvas>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Карточка лога -->
+                    <Border Classes="Card">
                         <StackPanel>
-                            <Grid Background="{DynamicResource SystemAltHighColor}" Margin="8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Status:" Grid.Column="0" FontWeight="Bold" />
-                                <TextBlock Text="{Binding ResponseStatus}" Grid.Column="1" Margin="5,0,15,0" />
-                                <TextBlock Text="Time:" Grid.Column="2" FontWeight="Bold" />
-                                <TextBlock Text="{Binding ResponseTime}" Grid.Column="3" Margin="5,0,0,0" />
-                            </Grid>
-                            <TabControl>
-                                <TabItem Header="Body">
-                                    <TextBox Text="{Binding ResponseBody}" AcceptsReturn="True" Height="200" IsReadOnly="True" />
-                                </TabItem>
-                                <TabItem Header="Headers">
-                                    <TextBox Text="{Binding ResponseHeaders}" AcceptsReturn="True" Height="200" IsReadOnly="True" />
-                                </TabItem>
-                            </TabControl>
+                            <Border Classes="CardHeader">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Лог выполнения МНТ" FontWeight="SemiBold" FontSize="15" />
+                                    <Button Margin="20 0 0 0" Padding="4 10" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                            Background="White" CornerRadius="4" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}">
+                                        Экспорт .log
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#0f172a" CornerRadius="6" Margin="10" Padding="12" Height="120">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="[14:31:58] [МНТ] Инициализация профиля нагрузки... VU: 50, Duration: 60s" Foreground="#94a3b8" FontFamily="Courier New, monospace" FontSize="12" />
+                                        <TextBlock Text="[14:31:59] [МНТ] Подключение к целевому эндпоинту: https://api.example.com/v1" Foreground="#94a3b8" FontFamily="Courier New, monospace" FontSize="12" />
+                                        <TextBlock Text="[14:32:00] [МНТ] Старт разгона виртуальных пользователей (10s)" Foreground="#34d399" FontFamily="Courier New, monospace" FontSize="12" />
+                                        <TextBlock Text="[14:32:08] [МНТ] Достижение стабильной нагрузки. Активных потоков: 50" Foreground="#94a3b8" FontFamily="Courier New, monospace" FontSize="12" />
+                                        <TextBlock Text="[14:32:15] [МНТ] Трафик сгенерирован. Текущий RPS: 96.4 | Ошибки: 0 | Avg: 118ms" Foreground="#34d399" FontFamily="Courier New, monospace" FontSize="12" />
+                                        <TextBlock Text="[14:32:25] [МНТ] Тест завершен. Всего запросов: 5840. Ошибок: 0." Foreground="#34d399" FontFamily="Courier New, monospace" FontSize="12" />
+                                        <TextBlock Text="[14:32:25] [МУП] Стабильность модуля генерации нагрузки подтверждена. Данные переданы в МУТ." Foreground="#34d399" FontFamily="Courier New, monospace" FontSize="12" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
                         </StackPanel>
                     </Border>
+
                 </StackPanel>
             </ScrollViewer>
-        </Grid>
-    </Grid>
+        </StackPanel>
+    </DockPanel>
 </Window>

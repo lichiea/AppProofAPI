@@ -8,8 +8,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        var vm = new MainWindowViewModel();
-        DataContext = vm;
-        vm.SetWindow(this); // передаём ссылку
+        DataContext = new MainWindowViewModel();
     }
 }
