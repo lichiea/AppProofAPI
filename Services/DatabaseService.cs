@@ -47,5 +47,47 @@ namespace ProofAPI.Services
                 .OrderByDescending(t => t.StartedAt)
                 .ToListAsync();
         }
+
+        public async Task<List<Project>> GetAllProjectsAsync()
+        {
+            // Возвращаем список всех проектов из таблицы Projects
+            return await _context.Projects.ToListAsync();
+        }
+
+        public async Task SaveProjectAsync(string projectName, string filePath)
+        {
+            var existingProject = await _context.Projects.FirstOrDefaultAsync(p => p.Name == projectName);
+            if (existingProject == null)
+            {
+                _context.Projects.Add(new Project { Name = projectName, OpenApiFilePath = filePath });
+            }
+            else
+            {
+                existingProject.OpenApiFilePath = filePath;
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteProjectAsync(int projectId)
+        {
+            // Находим проект по ID
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project != null)
+            {
+                // Удаляем проект
+                _context.Projects.Remove(project);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<Project?> GetProjectWithDetailsAsync(int projectId)
+        {
+            return await _context.Projects
+                .Include(p => p.TestRuns)
+                .ThenInclude(t => t.Vulnerabilities)
+                .Include(p => p.TestRuns)
+                .ThenInclude(t => t.SecurityHeadersResults)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+        }
     }
 }

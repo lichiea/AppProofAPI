@@ -1,0 +1,13 @@
+<html><head><title>ProofAPI Report</title></head><body>
+<h1>Test Report - 17.06.2026 1:58:34</h1>
+<p>Verdict: <b>FAILED</b></p>
+<p>Найдено 3 критических уязвимости</p>
+<h2>Vulnerabilities</h2>
+<table border='1'><tr><th>Type</th><th>Severity</th><th>Endpoint</th><th>Payload</th><th>Evidence</th></tr>
+<tr><td>SQL Injection</td><td>Critical</td><td>/login</td><td>' OR 1=1 --</td><td>Error: syntax error near 'OR'</td></tr>
+</table>
+<h2>cURL Commands</h2><pre>
+# SQL Injection at /login
+curl -X GET "/login?test=' OR 1=1 --"
+</pre>
+</body></html>

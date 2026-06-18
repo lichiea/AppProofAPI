@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AppProofAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3906b7d113c6cee93cee607899131b3e8151c1a1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+738b82bca2c260a8ee46584f321a016b05450a79")]
 [assembly: System.Reflection.AssemblyProductAttribute("AppProofAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AppProofAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,4 +1,5 @@
 // Data/AppDbContext.cs
+using System;
 using Microsoft.EntityFrameworkCore;
 using ProofAPI.Models;
 
@@ -13,8 +14,9 @@ namespace ProofAPI.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Файл БД будет создан в папке приложения
-            optionsBuilder.UseSqlite("Data Source=proofapi.db");
+            string appDirectory = AppContext.BaseDirectory;
+            string dbPath = System.IO.Path.Combine(appDirectory, "proofapi.db");
+            optionsBuilder.UseSqlite($"Data Source={dbPath}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

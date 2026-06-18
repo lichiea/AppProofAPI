@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:AppProofAPI.ViewModels"
+             x:Class="AppProofAPI.Views.ReportView"
+             x:DataType="vm:ReportViewModel"
+             Background="{StaticResource BgMainBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel Spacing="20">
+            <TextBlock Classes="h1" Text="Генерация отчётов" />
+
+            <Border Background="#ecfdf5" BorderBrush="#10b981" BorderThickness="0 0 0 4" CornerRadius="6" Padding="12">
+                <TextBlock Text="{Binding Status}" Foreground="#047857" />
+            </Border>
+
+            <TextBlock Text="{Binding ReportPath}" IsVisible="{Binding ReportPath, Converter={StaticResource StringNotEmptyConverter}}" />
+
+            <Button Command="{Binding GenerateReportCommand}" Content="Сгенерировать отчёт" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

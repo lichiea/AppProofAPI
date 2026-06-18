@@ -1,10 +1,11 @@
 <Application xmlns="https://github.com/avaloniaui"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             x:Class="AppProofAPI.App"
-            RequestedThemeVariant="Light">
+            RequestedThemeVariant="Light"
+            xmlns:converters="clr-namespace:AppProofAPI.Converters">
             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.Resources>
-        <!-- Цветовая палитра -->
+        <!-- <local:BoolToWarningBrushConverter x:Key="BoolToWarningBrush" /> -->
         <Color x:Key="ColorPrimaryDark">#002147</Color>
         <Color x:Key="ColorPrimaryBlue">#002fa7</Color>
         <Color x:Key="ColorSecondaryBlue">#1034a6</Color>
@@ -31,13 +32,13 @@
 
         <CornerRadius x:Key="RadiusMd">6</CornerRadius>
         <CornerRadius x:Key="RadiusLg">8</CornerRadius>
-        <!-- BoxShadow удалён из ресурсов – задаётся непосредственно в стилях -->
+        <converters:BoolToWarningBrushConverter x:Key="BoolToWarningBrush" />
+        <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
     </Application.Resources>
 
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Fluent/FluentTheme.xaml" />
 
-        <!-- Стили текста -->
         <Style Selector="TextBlock.h1">
             <Setter Property="FontSize" Value="20" />
             <Setter Property="FontWeight" Value="SemiBold" />
@@ -55,16 +56,14 @@
             <Setter Property="LetterSpacing" Value="0.5" />
         </Style>
 
-        <!-- Стиль для карточек -->
         <Style Selector="Border.Card">
             <Setter Property="Background" Value="{StaticResource BgCardBrush}" />
             <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
-            <Setter Property="BoxShadow" Value="0 1 3 0 rgba(0,0,0,0.05)" />
+            <!-- Убираем BoxShadow, в Avalonia 11 можно добавить через Styles с BoxShadow, но для простоты оставим без -->
         </Style>
 
-        <!-- Стиль для заголовка карточки -->
         <Style Selector="Border.CardHeader">
             <Setter Property="Background" Value="#fafafa" />
             <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />

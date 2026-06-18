@@ -33,6 +33,10 @@ namespace ProofAPI.Services
     {
         Task SaveTestRunAsync(Project project, TestRun testRun);
         Task<List<TestRun>> GetHistoryAsync(int projectId);
+        Task<List<Project>> GetAllProjectsAsync();
+        Task SaveProjectAsync(string projectName, string filePath);
+        Task DeleteProjectAsync(int projectId);
+        Task<Project?> GetProjectWithDetailsAsync(int projectId);
     }
 
     public interface IReportGenerator

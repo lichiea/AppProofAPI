@@ -1,0 +1,69 @@
+openapi: 3.0.3
+info:
+  title: E-Commerce Product API
+  version: 2.1.0
+  description: API для работы с каталогом товаров и корзиной
+servers:
+  - url: https://api.example.com/v2
+paths:
+  /products:
+    get:
+      summary: Получить список товаров
+      parameters:
+        - name: category
+          in: query
+          description: Фильтр по категории
+          schema:
+            type: string
+        - name: min_price
+          in: query
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/{id}:
+    get:
+      summary: Получить товар по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Товар не найден
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        in_stock:
+          type: boolean

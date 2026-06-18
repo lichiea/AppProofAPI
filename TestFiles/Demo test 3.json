@@ -1,0 +1,336 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Demo E-Commerce API (Test Stand)",
+    "description": "Тестовый стенд для демонстрации работы инструмента ProofAPI. Содержит 15 эндпоинтов с различными типами параметров для проверки нагрузочного тестирования и фаззинга.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "QA Team",
+      "email": "qa@example.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://jsonplaceholder.typicode.com",
+      "description": "Публичный тестовый REST API"
+    }
+  ],
+  "paths": {
+    "/posts": {
+      "get": {
+        "summary": "Получить список постов",
+        "operationId": "getPosts",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Фильтр по ID пользователя",
+            "schema": { "type": "integer", "example": 1 }
+          },
+          {
+            "name": "_limit",
+            "in": "query",
+            "description": "Максимальное количество результатов",
+            "schema": { "type": "integer", "example": 10 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список постов" }
+        }
+      },
+      "post": {
+        "summary": "Создать новый пост",
+        "operationId": "createPost",
+        "tags": ["Posts"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string", "example": "Test Post" },
+                  "body": { "type": "string", "example": "Content" },
+                  "userId": { "type": "integer", "example": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Пост создан" }
+        }
+      }
+    },
+    "/posts/{postId}": {
+      "get": {
+        "summary": "Получить пост по ID",
+        "operationId": "getPostById",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "description": "ID поста",
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Детали поста" }
+        }
+      },
+      "put": {
+        "summary": "Обновить пост",
+        "operationId": "updatePost",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string", "example": "Updated" },
+                  "body": { "type": "string", "example": "Updated body" },
+                  "userId": { "type": "integer", "example": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Пост обновлён" }
+        }
+      },
+      "delete": {
+        "summary": "Удалить пост",
+        "operationId": "deletePost",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Пост удалён" }
+        }
+      }
+    },
+    "/posts/{postId}/comments": {
+      "get": {
+        "summary": "Получить комментарии к посту",
+        "operationId": "getPostComments",
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список комментариев" }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Получить список пользователей",
+        "operationId": "getUsers",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Фильтр по email",
+            "schema": { "type": "string", "example": "test@example.com" }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Фильтр по имени пользователя",
+            "schema": { "type": "string", "example": "John" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список пользователей" }
+        }
+      },
+      "post": {
+        "summary": "Создать нового пользователя",
+        "operationId": "createUser",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example": "John Doe" },
+                  "username": { "type": "string", "example": "johndoe" },
+                  "email": { "type": "string", "format": "email", "example": "john@example.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Пользователь создан" }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "summary": "Получить пользователя по ID",
+        "operationId": "getUserById",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Детали пользователя" }
+        }
+      }
+    },
+    "/users/{userId}/albums": {
+      "get": {
+        "summary": "Получить альбомы пользователя",
+        "operationId": "getUserAlbums",
+        "tags": ["Albums"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список альбомов" }
+        }
+      }
+    },
+    "/albums": {
+      "get": {
+        "summary": "Получить список альбомов",
+        "operationId": "getAlbums",
+        "tags": ["Albums"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Фильтр по ID пользователя",
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список альбомов" }
+        }
+      }
+    },
+    "/albums/{albumId}": {
+      "get": {
+        "summary": "Получить альбом по ID",
+        "operationId": "getAlbumById",
+        "tags": ["Albums"],
+        "parameters": [
+          {
+            "name": "albumId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Детали альбома" }
+        }
+      }
+    },
+    "/albums/{albumId}/photos": {
+      "get": {
+        "summary": "Получить фото альбома",
+        "operationId": "getAlbumPhotos",
+        "tags": ["Photos"],
+        "parameters": [
+          {
+            "name": "albumId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список фото" }
+        }
+      }
+    },
+    "/todos": {
+      "get": {
+        "summary": "Получить список задач",
+        "operationId": "getTodos",
+        "tags": ["Todos"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Фильтр по ID пользователя",
+            "schema": { "type": "integer", "example": 1 }
+          },
+          {
+            "name": "completed",
+            "in": "query",
+            "description": "Фильтр по статусу выполнения",
+            "schema": { "type": "boolean", "example": true }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список задач" }
+        }
+      }
+    },
+    "/comments": {
+      "get": {
+        "summary": "Получить список комментариев",
+        "operationId": "getComments",
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "query",
+            "description": "Фильтр по ID поста",
+            "schema": { "type": "integer", "example": 1 }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Фильтр по email автора",
+            "schema": { "type": "string", "example": "user@example.com" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Список комментариев" }
+        }
+      }
+    }
+  }
+}

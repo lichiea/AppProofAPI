@@ -24,7 +24,7 @@ namespace ProofAPI.Services
             }
             sb.AppendLine("</table>");
 
-            // cURL команды для воспроизведения (пример)
+            // cURL команды для воспроизведения
             sb.AppendLine("<h2>cURL Commands</h2><pre>");
             foreach (var vuln in testRun.Vulnerabilities)
             {

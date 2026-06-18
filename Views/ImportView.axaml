@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:vm="clr-namespace:AppProofAPI.ViewModels"
+            x:Class="AppProofAPI.Views.ImportView"
+            x:DataType="vm:ImportViewModel"
+            Background="{StaticResource BgMainBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel Spacing="16" MaxWidth="800">
+            <TextBlock Classes="h1" Text="Импорт спецификации OpenAPI" />
+
+            <!-- Статус -->
+            <Border Background="#ecfdf5" BorderBrush="#10b981" BorderThickness="0 0 0 4" CornerRadius="6" Padding="12">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="#047857" TextWrapping="Wrap"/>
+            </Border>
+
+            <!-- Название проекта -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Название проекта" FontWeight="SemiBold" />
+                <TextBox Text="{Binding ProjectName}" Watermark="Введите имя проекта" />
+            </StackPanel>
+
+            <!-- Выбор файла -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Файл спецификации" FontWeight="SemiBold" />
+                <DockPanel>
+                    <Button Content="Выбрать файл..."
+                            DockPanel.Dock="Right"
+                            Click="OnSelectFileClick"
+                            Margin="8 0 0 0" />
+                    <TextBox Text="{Binding SelectedFilePath}"
+                            IsReadOnly="True"
+                            Watermark="Путь к файлу не выбран" />
+                </DockPanel>
+            </StackPanel>
+
+            <!-- Кнопка импорта и сохранения -->
+            <!-- CommandParameter берет путь из свойства SelectedFilePath -->
+            <Button Command="{Binding ImportOpenApiCommand}"
+                    CommandParameter="{Binding SelectedFilePath}"
+                    Content="Импортировать и сохранить проект"
+                    HorizontalAlignment="Left" />
+
+            <!-- Список эндпоинтов -->
+            <TextBlock Classes="h2" Text="Распарсенные эндпоинты" />
+            <ItemsControl ItemsSource="{Binding Endpoints}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0 4" Padding="10" Background="{StaticResource BgCardBrush}" CornerRadius="6" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="{Binding Method}" FontWeight="Bold" Foreground="{StaticResource ColorAccentBlue}" />
+                                <TextBlock Text="{Binding Path}" FontFamily="Courier New" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

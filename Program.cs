@@ -1,4 +1,6 @@
 ﻿using Avalonia;
+using Avalonia.ReactiveUI;
+using Avalonia.Fonts.Inter;
 using System;
 
 namespace AppProofAPI;
@@ -20,5 +22,6 @@ class Program
             .WithDeveloperTools()
 #endif
             .WithInterFont()
-            .LogToTrace();
+            .LogToTrace()
+            .UseReactiveUI();
 }

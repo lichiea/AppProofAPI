@@ -1,0 +1,335 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Vulnerable API for Security & Load Testing",
+    "version": "1.0.0",
+    "description": "Этот API намеренно содержит уязвимости и отсутствие ограничений для демонстрации проблем безопасности и нагрузочного тестирования. Не используйте в production!"
+  },
+  "servers": [
+    {
+      "url": "https://vulnerable-api.example.com/v1"
+    }
+  ],
+  "paths": {
+    "/upload": {
+      "post": {
+        "summary": "Загрузка файла без ограничений",
+        "operationId": "uploadFile",
+        "description": "Принимает файл любого размера и типа. Отсутствует проверка MIME-типа и размера, что может привести к DoS или выполнению вредоносного кода.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Файл загружен"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Поиск без валидации входных данных",
+        "operationId": "search",
+        "description": "Параметр 'q' не экранируется, что делает эндпоинт уязвимым для XSS и SQL-инъекций. Также отсутствует ограничение на длину запроса.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Результаты поиска"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Получение списка всех пользователей без аутентификации",
+        "operationId": "getAllUsers",
+        "description": "Эндпоинт не требует аутентификации и возвращает все данные пользователей, включая пароли и email, что является утечкой конфиденциальной информации.",
+        "responses": {
+          "200": {
+            "description": "Список пользователей"
+          }
+        }
+      }
+    },
+    "/execute": {
+      "post": {
+        "summary": "Выполнение произвольного кода (опасно!)",
+        "operationId": "executeCode",
+        "description": "Принимает код на Python и выполняет его на сервере без ограничений. Это критическая уязвимость (RCE).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Результат выполнения"
+          }
+        }
+      }
+    },
+    "/logs": {
+      "get": {
+        "summary": "Получение логов с чувствительной информацией",
+        "operationId": "getLogs",
+        "description": "Возвращает логи сервера, которые могут содержать пароли, токены и внутренние пути. Доступ без аутентификации.",
+        "responses": {
+          "200": {
+            "description": "Логи"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "delete": {
+        "summary": "Удаление пользователя без проверки прав",
+        "operationId": "deleteUser",
+        "description": "Любой пользователь может удалить любого другого пользователя, передав его ID. Отсутствует авторизация.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Пользователь удален"
+          }
+        }
+      }
+    },
+    "/config": {
+      "get": {
+        "summary": "Возвращает конфигурацию сервера с секретами",
+        "operationId": "getConfig",
+        "description": "Отдает файл конфигурации с паролями БД, API-ключами и другими секретами. Доступ открыт.",
+        "responses": {
+          "200": {
+            "description": "Конфигурация"
+          }
+        }
+      }
+    },
+    "/bulk": {
+      "post": {
+        "summary": "Массовая операция без ограничения размера",
+        "operationId": "bulkProcess",
+        "description": "Принимает массив объектов любого размера. Отсутствие ограничения может привести к переполнению памяти (DoS).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Обработано"
+          }
+        }
+      }
+    },
+    "/slow": {
+      "get": {
+        "summary": "Эндпоинт с искусственной задержкой",
+        "operationId": "slowResponse",
+        "description": "Задерживает ответ на 30 секунд, что может использоваться для DoS-атак путем отправки множества запросов (отсутствует rate limiting).",
+        "parameters": [
+          {
+            "name": "delay",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ответ после задержки"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Вход без защиты от брутфорса",
+        "operationId": "login",
+        "description": "Не ограничивает количество попыток входа, что позволяет подбирать пароли перебором. Также отсутствует CAPTCHA.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный вход"
+          },
+          "401": {
+            "description": "Неверные данные"
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "summary": "Информация о сервере",
+        "operationId": "ping",
+        "description": "Возвращает версию ОС, версию Python, список установленных пакетов и другую информацию, которая помогает злоумышленнику.",
+        "responses": {
+          "200": {
+            "description": "Информация о сервере"
+          }
+        }
+      }
+    },
+    "/webhook": {
+      "post": {
+        "summary": "Прием webhook с возможностью SSRF",
+        "operationId": "webhook",
+        "description": "Принимает URL и делает запрос к нему без валидации, что позволяет атаковать внутренние сервисы (SSRF).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "callbackUrl": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Обработка webhook"
+          }
+        }
+      }
+    },
+    "/export": {
+      "get": {
+        "summary": "Экспорт данных без ограничения количества",
+        "operationId": "exportData",
+        "description": "Возвращает все данные из БД в формате CSV. Отсутствие пагинации может привести к огромному ответу и перегрузке.",
+        "responses": {
+          "200": {
+            "description": "CSV файл"
+          }
+        }
+      }
+    },
+    "/users/{id}/password": {
+      "put": {
+        "summary": "Смена пароля без подтверждения старого",
+        "operationId": "changePassword",
+        "description": "Позволяет изменить пароль любого пользователя, зная только его ID. Отсутствует проверка текущего пароля.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newPassword": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Пароль изменен"
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Детальный статус системы",
+        "operationId": "status",
+        "description": "Возвращает информацию о состоянии БД, кэша, версиях зависимостей, IP-адресах и другую внутреннюю информацию, полезную для атак.",
+        "responses": {
+          "200": {
+            "description": "Детальный статус"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {}
+  },
+  "security": []
+}

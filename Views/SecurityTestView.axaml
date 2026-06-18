@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:AppProofAPI.ViewModels"
+             x:Class="AppProofAPI.Views.SecurityTestView"
+             x:DataType="vm:SecurityTestViewModel"
+             Background="{StaticResource BgMainBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel Spacing="20">
+            <TextBlock Classes="h1" Text="Тестирование безопасности" />
+
+            <!-- Блок статуса -->
+            <Border Background="{Binding ShowErrorSimulation, Converter={StaticResource BoolToWarningBrush}}"
+                    BorderBrush="#e2e8f0" BorderThickness="1" CornerRadius="6" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="{Binding Status}" />
+                    <TextBlock Text="{Binding LastResult}" Foreground="{StaticResource TextSecondary}" />
+                </StackPanel>
+            </Border>
+
+            <!-- Блок ошибки видимый только при ошибке -->
+            <Border Background="#0f172a" Padding="10" CornerRadius="6"
+                    IsVisible="{Binding ShowErrorSimulation}">
+                <TextBox Text="{Binding ErrorDetails}" AcceptsReturn="True" TextWrapping="Wrap"
+                         Background="Transparent" Foreground="#e2e8f0" FontFamily="Courier New" FontSize="12" Height="100" />
+            </Border>
+
+            <Button Command="{Binding RunSecurityScanCommand}" Content="Запустить сканирование" IsEnabled="{Binding !IsRunning}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

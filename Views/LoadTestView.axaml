@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:AppProofAPI.ViewModels"
+             x:Class="AppProofAPI.Views.LoadTestView"
+             x:DataType="vm:LoadTestViewModel"
+             Background="{StaticResource BgMainBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel Spacing="20">
+            <TextBlock Classes="h1" Text="Нагрузочное тестирование" />
+
+            <Border Background="#f0f9ff" BorderBrush="#38bdf8" BorderThickness="0 0 0 4" CornerRadius="6" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="{Binding Status}" Foreground="#0284c7" />
+                    <TextBlock Text="{Binding Verdict}" FontWeight="Bold" Foreground="Red" />
+                    <TextBlock Text="{Binding Summary}" Foreground="{StaticResource TextSecondary}" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Card">
+                <StackPanel Margin="16" Spacing="10">
+                    <StackPanel>
+                        <TextBlock Text="Виртуальные пользователи" Classes="muted" />
+                        <Slider Value="{Binding VirtualUsers}" Minimum="1" Maximum="1000" />
+                        <TextBlock Text="{Binding VirtualUsers}" TextAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Длительность (сек)" Classes="muted" />
+                        <Slider Value="{Binding DurationSeconds}" Minimum="5" Maximum="3600" />
+                        <TextBlock Text="{Binding DurationSeconds}" TextAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Разгон (сек)" Classes="muted" />
+                        <Slider Value="{Binding RampUpSeconds}" Minimum="0" Maximum="300" />
+                        <TextBlock Text="{Binding RampUpSeconds}" TextAlignment="Center" />
+                    </StackPanel>
+                    <Button Command="{Binding RunTestCommand}" Content="Запустить тест" IsEnabled="{Binding !IsRunning}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

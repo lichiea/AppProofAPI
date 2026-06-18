@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:AppProofAPI.ViewModels"
+             xmlns:converters="clr-namespace:AppProofAPI.Converters"
+             x:Class="AppProofAPI.Views.ProjectDetailsView"
+             x:DataType="vm:ProjectDetailsViewModel"
+             Background="{StaticResource BgMainBrush}">
+
+    <!-- Регистрируем конвертеры -->
+    <UserControl.Resources>
+        <converters:VerdictToBrushConverter x:Key="VerdictToBrushConverter"/>
+        <converters:SeverityToBrushConverter x:Key="SeverityToBrushConverter"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32" Spacing="24" MaxWidth="1000">
+
+            <!-- ШАПКА ПРОЕКТА -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Project.Name}"
+                           FontSize="28" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="{Binding Project.OpenApiFilePath}"
+                           FontSize="12" Foreground="#8899AA" TextTrimming="CharacterEllipsis"/>
+                <Border Background="#1a334d" CornerRadius="4" Padding="8 4" HorizontalAlignment="Left" Margin="0 8 0 0">
+                    <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="#10b981"/>
+                </Border>
+            </StackPanel>
+
+            <!-- СЕКЦИЯ: ОТЧЕТЫ И ИСТОРИЯ ЗАПУСКОВ -->
+            <StackPanel Spacing="12">
+                <TextBlock Text="История запусков и отчеты" FontSize="20" FontWeight="SemiBold" Foreground="White" />
+
+                <ItemsControl ItemsSource="{Binding TestRuns}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0 4" Padding="16" Background="{StaticResource BgCardBrush}"
+                                    CornerRadius="8" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="{Binding StartedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                                       FontWeight="Bold" Foreground="White" FontSize="14"/>
+
+                                            <!-- Цвет вердикта через конвертер -->
+                                            <Border CornerRadius="4" Padding="6 2" VerticalAlignment="Center"
+                                                    Background="{Binding Verdict, Converter={StaticResource VerdictToBrushConverter}}">
+                                                <TextBlock Text="{Binding Verdict}" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Summary}" Foreground="#8899AA" FontSize="12" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Run Text="Уязвимостей: " Foreground="#8899AA"/>
+                                        <Run Text="{Binding Vulnerabilities.Count}" Foreground="White" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Заглушка, если запусков нет -->
+                <TextBlock Text="Тестирование еще не проводилось." Foreground="#8899AA" FontStyle="Italic"
+                           IsVisible="{Binding !TestRuns.Count}"/>
+            </StackPanel>
+
+            <!-- СЕКЦИЯ: ВЫЯВЛЕННЫЕ УЯЗВИМОСТИ -->
+            <StackPanel Spacing="12">
+                <TextBlock Text="Выявленные уязвимости" FontSize="20" FontWeight="SemiBold" Foreground="White" />
+
+                <ItemsControl ItemsSource="{Binding Vulnerabilities}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0 4" Padding="16" Background="{StaticResource BgCardBrush}"
+                                    CornerRadius="8" BorderThickness="2"
+                                    BorderBrush="{Binding Severity, Converter={StaticResource SeverityToBrushConverter}}">
+
+                                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto">
+                                    <!-- Бейдж критичности -->
+                                    <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                                            Background="#1a334d" CornerRadius="4" Padding="8 4" Margin="0 0 12 0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Severity}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                    </Border>
+
+                                    <!-- Информация об уязвимости -->
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="{Binding Type}" FontWeight="Bold" Foreground="White" FontSize="14"/>
+                                        <TextBlock Foreground="#8899AA" FontSize="12">
+                                            <Run Text="Эндпоинт: "/>
+                                            <Run Text="{Binding Endpoint}" Foreground="#60a5fa" FontFamily="Courier New"/>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <!-- Дата обнаружения -->
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding DetectedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                               Foreground="#8899AA" FontSize="11" VerticalAlignment="Center"/>
+
+                                    <!-- Доказательство (Evidence) -->
+                                    <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                            Background="#0f172a" CornerRadius="4" Padding="8" Margin="0 8 0 0">
+                                        <TextBlock Text="{Binding Evidence}" Foreground="#94a3b8" FontFamily="Courier New" FontSize="11" TextWrapping="Wrap"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Заглушка, если уязвимостей нет -->
+                <TextBlock Text="Уязвимостей не обнаружено. Отличная работа!" Foreground="#10b981" FontStyle="Italic"
+                           IsVisible="{Binding !Vulnerabilities.Count}"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

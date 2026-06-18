@@ -1,0 +1,20 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="AppProofAPI.Views.ConfirmDeleteWindow"
+        Title="Подтверждение удаления"
+        Width="400" Height="180"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        SystemDecorations="BorderOnly">
+    <StackPanel Margin="24" Spacing="20">
+        <TextBlock Name="MessageText"
+                   Text="Вы уверены, что хотите удалить проект?"
+                   TextWrapping="Wrap"
+                   FontSize="14" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+            <Button Name="CancelBtn" Content="Отмена" Width="100" Click="CancelBtn_Click" />
+            <Button Name="ConfirmBtn" Content="Удалить" Width="100" Background="#ff4d4f" Foreground="White" Click="ConfirmBtn_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>
